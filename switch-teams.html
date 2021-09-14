@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+
+{% block stylesheet %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/css/admin-styles.css') }}" /> 
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Nav Bar -->
+<div class="navbar">
+    <a href="/admin/">Admin</a>
+    <div class="dropdown">
+      <button class="dropbtn">Create Users</button>
+      <div class="dropdown-content">
+        <a href="/admin/create-player">Create Player</a>
+        <a href="/admin/create-coach">Create Coach</a>
+        <a href="#">Switch Teams</a>
+      </div>
+    </div>
+    <a href="/"><i class="fas fa-home"></i></a>
+  </div>
+
+  <h4>Switch players between different teams in the Gengee portal</h4>
+  <table id="overview-table">
+      <thead>
+          <tr>
+              <th>Player</th>
+              <th>Teams</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for i in range(nr_rows) %}
+            <tr>
+                <td>{{players[i]}}</td>
+                <td>{{teams[i]}}</td>
+                <!-- Change the requested value to user player id -->
+                <td><a style="color: blue; text-decoration: underline;" onclick="document.getElementById('id01').style.display='block';  document.getElementById('user-name').value = '{{players[i]}}'; document.getElementById('user-name2').value = '{{players[i]}}'">Actions</a></td>
+            </tr>
+        {% endfor %}
+      </tbody>
+  </table>
+
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        
+        <div class="tab">
+          <button class="tablinks" onclick="openTab(event, 'add')">Add to Team</button>
+          <button class="tablinks" onclick="openTab(event, 'remove')">Remove from Team</button>
+        </div>
+
+
+        <!-- Add Tab -->
+        <div id="add" class="tabcontent">
+
+        <p>Add users to teams in the Gengee portal:</p>
+        <form style="padding: 3px;" method="POST">
+
+          <input id="user-name" type="hidden" name="user-name" value="">
+          <input id="action" type="hidden" name="action" value="add">
+          <select name="team_name">
+            {% for i in range(nr_teams) %}
+                <option>{{all_teams[i]}}</option>
+            {% endfor %}
+          </select>
+
+          <input type="submit" value="Add to Team">
+        </form>
+        </div>
+
+        <!-- End Add Tab -->
+
+
+        <!-- Remove Tab -->
+        <div id="remove" class="tabcontent">
+
+            <p>Remove users from teams in the Gengee portal:</p>
+            <form style="padding: 3px;" method="POST">
+    
+              <input id="user-name2" type="hidden" name="user-name2" value="">
+              <select name="team_name">
+                {% for i in range(nr_teams) %}
+                    <option>{{all_teams[i]}}</option>
+                {% endfor %}
+              </select>
+    
+              <input type="submit" value="Delete from Team">
+            </form>
+
+          </div>
+          <!-- End Remove Tab -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+    <!-- Script needed to open the tabs -->
+    <script>
+        function openTab(evt, action) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(action).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        </script>
+  <script>
+    $(document).ready(function() {
+        $('#overview-table').DataTable();
+    } );
+  </script>
+
+{% endblock %}
