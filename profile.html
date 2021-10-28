@@ -1,0 +1,74 @@
+<title>{{user.username}}'s Profile | Technoleon</title>
+{% extends 'layout.html' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/css/profile-styles.css') }}" /> 
+{% endblock %}
+
+{% block content %}
+
+{% for category, message in get_flashed_messages(with_categories=True) %}  
+<div class="alert-{{category}}">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+  {{ message }}
+</div>
+{% endfor %}
+
+<h1 id="profile-header">{{user.username}}'s Profile</h1>
+
+<div id="profile-container">
+
+  <div id="main-block">
+
+
+    <div id="cover-image-block">
+      <img id="cover-image" src="https://kenan0x0.github.io/Misc/bgImage.png" alt="Cover Image of {{user.username}}">
+    </div>
+
+    <div id="profile-image-block">
+      <div class="t-item-1">
+        <img id="profile-image" src="{{profile_image}}" alt="Profile Image of {{user.username}}">
+      </div>
+        <p class="t-item-1">{{user.username}}</p>
+    </div>
+
+    <hr>
+
+    <div id="info-block">
+      <div class="t-item-2">
+        <i class="fas fa-at fa-2x t-item-3" title="Email Address"></i>
+        <p class="t-item-3">{{user.email}}</p>
+      </div>
+
+      <div class="t-item-2">
+        <i class="fas fa-user-friends fa-2x t-item-3" title="Team Name"></i>
+        {% if user.user_type.name == 'coach' %}
+          <p class="t-item-3">{{user.team_names}}</p>
+        {% else %}
+          <p class="t-item-3">{{user.team_name}}</p>
+        {% endif %}
+      </div>
+
+      <div class="t-item-2">
+        <i class="fas fa-user fa-2x t-item-3" title="Full Name"></i>
+        <p class="t-item-3">{{user.full_name}}</p>
+      </div>
+
+      <div class="t-item-2">
+        <i class="fas fa-birthday-cake fa-2x t-item-3" title="Birthday"></i>
+        <p class="t-item-3">{{user.birthday}}</p>
+      </div>
+
+      <div class="t-item-2">
+        <i class="far fa-futbol fa-2x t-item-3" title="Club Name"></i>
+        <p class="t-item-3">{{club_name}}</p>
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>
+{% endblock %}
